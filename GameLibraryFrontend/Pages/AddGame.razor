@@ -1,0 +1,56 @@
+@page "/add-game"
+@inject HttpClient Http
+
+<PageTitle>AddGame</PageTitle>
+
+<h3>Добавить новую игру</h3>
+
+
+<div>
+    <label>Название игры:</label>
+    <input class="form-control" @bind="newGame.Title" />
+</div>
+
+<div>
+    <label>Описание (опционально):</label>
+    <input class="form-control" @bind="newGame.Description" />
+</div>
+
+<div>
+    <label>Рейтинг: <strong>@newGame.Rating</strong></label>
+    <input type="range" min="0" max="100" step="1" class="form-range" @bind="newGame.Rating" @bind:event="oninput" />
+</div>
+
+<button class="btn btn-primary" @onclick="SubmitGame">Добавить</button>
+
+
+@if (message != null)
+{
+    <div class="alert alert-info mt-3">@message</div>
+}
+
+@code {
+    private GameModel newGame = new GameModel();
+    private string? message;
+
+    private async Task SubmitGame()
+    {
+        var response = await Http.PostAsJsonAsync("http://localhost:5104/gamelibrary", newGame);
+
+        if (response.IsSuccessStatusCode)
+        {
+            message = "Игра успешно добавлена!";
+            newGame = new GameModel(); 
+        }
+        else
+        {
+            message = "Ошибка при добавлении игры.";
+        }
+    }
+    public class GameModel
+    {
+        public string Title { get; set; }
+        public string? Description { get; set; }
+        public int Rating { get; set; } 
+    }
+}

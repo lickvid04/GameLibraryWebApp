@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="GameLibrary/GameLibrary.csproj" />
+  <Project Path="GameLibraryFrontend/GameLibraryFrontend.csproj" />
+</Solution>

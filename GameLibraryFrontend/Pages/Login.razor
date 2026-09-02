@@ -1,0 +1,61 @@
+@page "/login"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<PageTitle>Login</PageTitle>
+
+<h3>Вход</h3>
+
+<div>
+    <label>Почта:</label>
+    <input class="form-control" @bind="newUserLogin.Mail" />
+</div>
+
+<div>
+    <label>Пароль:</label>
+    <input class="form-control" @bind="newUserLogin.Password" />
+</div>
+
+<button class="btn btn-primary" @onclick="UserLogin">Войти</button>
+
+<h2><a href="/register">Нет аккаунта? Зарегистрируйтесь</a></h2>
+
+
+@if (message != null)
+{
+    <div class="alert alert-info mt-3">@message</div>
+}
+
+@code {
+    private UserLoginRequest newUserLogin = new UserLoginRequest();
+    private string? message;
+
+    private async Task UserLogin()
+    {
+        var loginRequest = new UserLoginRequest
+        {
+            Mail = newUserLogin.Mail,
+            Password = newUserLogin.Password
+        };
+
+        var response = await Http.PostAsJsonAsync("http://localhost:5104/user/login", loginRequest);
+
+        if (response.IsSuccessStatusCode)
+        {
+            message = "Вход выполнен успешно!";
+            StateHasChanged();
+            await Task.Delay(1300);
+            Navigation.NavigateTo("/games");
+        }
+        else
+        {
+            message = "Ошибка при входе. Проверьте почту и пароль.";
+        }
+    }
+
+    public class UserLoginRequest
+    {
+        public string Mail { get; set; }
+        public string Password { get; set; }
+    }
+}

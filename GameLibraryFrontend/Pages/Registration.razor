@@ -1,0 +1,60 @@
+@page "/register"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<PageTitle>Registration</PageTitle>
+
+<h3>Регистрация</h3>
+
+
+<div>
+    <label>Имя пользователя:</label>
+    <input class="form-control" @bind="newUser.Nickname" />
+</div>
+
+<div>
+    <label>Почта:</label>
+    <input class="form-control" @bind="newUser.Mail" />
+</div>
+
+<div>
+    <label>Пароль:</label>
+    <input class="form-control" @bind="newUser.Password" />
+</div>
+
+<button class="btn btn-primary" @onclick="UserRegistration">Зарегистрироваться</button>
+
+
+@if (message != null)
+{
+    <div class="alert alert-info mt-3">@message</div>
+}
+
+@code {
+    private UserModel newUser = new UserModel();
+    private string? message;
+
+    private async Task UserRegistration()
+    {
+        var response = await Http.PostAsJsonAsync("http://localhost:5104/user/register", newUser);
+
+        if (response.IsSuccessStatusCode)
+        {
+            message = "Регистрация прошла успешно!";
+            newUser = new UserModel(); 
+            StateHasChanged();
+            await Task.Delay(1300);
+            Navigation.NavigateTo("/games");
+        }
+        else
+        {
+            message = "Ошибка при регистрации.";
+        }
+    }
+    public class UserModel
+    {
+        public string Nickname { get; set; }
+        public string Mail { get; set; }
+        public string Password { get; set; }
+    }
+}

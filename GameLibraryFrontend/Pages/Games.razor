@@ -1,0 +1,73 @@
+@page "/games"
+@inject HttpClient Http
+
+<PageTitle>Games</PageTitle>
+
+<h1>Библиотека игр</h1>
+
+<div class="grid-container">
+@if (gamesList == null)
+{
+    <p><em>Загрузка игр с сервера...</em></p>
+}
+else
+{
+            @foreach (var game in gamesList)
+            {
+                <div>
+                    <h3>@game.Title</h3>
+                    <div class="game-media">
+                        <div class="game-image"><p>Здесь типа фотка должна быть</p></div>
+                        <div class="game-description"><p>@game.Description</p></div>
+                    </div>
+                    <div>@game.Rating.ToString("F1")</div>
+                </div>
+            }
+}
+</div>
+
+@code {
+    private List<GameModel>? gamesList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        gamesList = await Http.GetFromJsonAsync<List<GameModel>>("http://localhost:5104/gamelibrary");
+    }
+
+    public class GameModel
+    {
+        public int Game_ID { get; set; }
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public int Rating { get; set; }
+        
+        public string[]? Tags { get; set; }  
+    }
+}
+
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 20px; 
+        padding: 20px;
+    }
+    .game-media {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .game-image {
+        flex: 1;
+        max-width: 200px;
+    }
+    .game-description {
+        flex: 1;
+        min-width: 0;
+    }
+
+</style>
