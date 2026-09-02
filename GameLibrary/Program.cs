@@ -6,12 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOpenApi();
-builder.Services.AddCors(); 
+
+builder.Configuration.Sources.Clear();
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: false);
+builder.Configuration.AddEnvironmentVariables();
 
+builder.Services.AddOpenApi();
+builder.Services.AddCors(); 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
