@@ -103,5 +103,6 @@ gameGroup.MapPost("/", async (Games game, AppDbContext db) =>
 
 app.UseDefaultFiles(); 
 app.UseStaticFiles(); 
+app.MapFallbackToFile("index.html");
 
 app.Run();

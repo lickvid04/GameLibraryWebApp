@@ -35,7 +35,7 @@
 
     private async Task SubmitGame()
     {
-        var response = await Http.PostAsJsonAsync("http://localhost:5104/gamelibrary", newGame);
+        var response = await Http.PostAsJsonAsync("/gamelibrary", newGame);
 
         if (response.IsSuccessStatusCode)
         {

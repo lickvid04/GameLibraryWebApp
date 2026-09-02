@@ -36,7 +36,7 @@
 
     private async Task UserRegistration()
     {
-        var response = await Http.PostAsJsonAsync("http://localhost:5104/user/register", newUser);
+        var response = await Http.PostAsJsonAsync("/user/register", newUser);
 
         if (response.IsSuccessStatusCode)
         {

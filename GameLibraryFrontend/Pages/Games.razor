@@ -31,7 +31,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        gamesList = await Http.GetFromJsonAsync<List<GameModel>>("http://localhost:5104/gamelibrary");
+        gamesList = await Http.GetFromJsonAsync<List<GameModel>>("/gamelibrary");
     }
 
     public class GameModel

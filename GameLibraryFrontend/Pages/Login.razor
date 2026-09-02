@@ -38,7 +38,7 @@
             Password = newUserLogin.Password
         };
 
-        var response = await Http.PostAsJsonAsync("http://localhost:5104/user/login", loginRequest);
+        var response = await Http.PostAsJsonAsync("/user/login", loginRequest);
 
         if (response.IsSuccessStatusCode)
         {
